@@ -37,10 +37,10 @@
                 <td><span ng-bind="infoPrd.Nom"></span></td>
                 <td><span ng-bind="infoPrd.PrixMin"></span></td>
                 <td><span ng-bind="infoPrd.InfosPrixMin.Enseigne"></span></td>
-                <td><span ng-bind="infoPrd.InfosPrixMin.Adresse"></span><span ng-bind="infoPrd.InfosPrixMin.Ville"></span></td>
+                <td><span ng-bind="infoPrd.InfosPrixMin.Adresse"></span><span class="split">|</span><span ng-bind="infoPrd.InfosPrixMin.Ville"></span></td>
                 <td><span ng-bind="infoPrd.PrixMax"></span></td>
                 <td><span ng-bind="infoPrd.InfosPrixMax.Enseigne"></span></td>
-                <td><span ng-bind="infoPrd.InfosPrixMax.Adresse"></span><span ng-bind="infoPrd.InfosPrixMax.Ville"></span></td>
+                <td><span ng-bind="infoPrd.InfosPrixMax.Adresse"></span><span class="split">|</span><span ng-bind="infoPrd.InfosPrixMax.Ville"></span></td>
                 <td><span ng-bind="infoPrd.Diff"></span></td>
             </tr>
         </table>

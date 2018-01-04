@@ -3,14 +3,16 @@ var myApp = angular.module('myApp', []);
 myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', function($scope, $http, $httpParamSerializer){
     var scp = $scope;
     scp.errorMessage = "";
-    
+    scp.infosProduits;
+
     $http({
         method: 'GET',
         url: 'functions.php',
     }).then(function(result) {
-        console.log(result);
+        scp.infosProduits = result.data;
+        console.log(result.data);
     })
-    
+
     scp.SubmitCsv = function(){
         var entree = document.getElementById('fichierCsv').files[0];
         if (entree == undefined){

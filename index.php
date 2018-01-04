@@ -21,6 +21,31 @@
                 <input type="submit">
             </form>
         </section>
-        
+        <input type="search" ng-model="search">
+        <table class="table">
+            <tr>
+                <th>Produit</th>
+                <th>Prix plus bas</th>
+                <th>Artisan bas</th>
+                <th>Adresse Artisan</th>
+                <th>Prix plus haut</th>
+                <th>Artisan haut</th>
+                <th>Adresse Artisan</th>
+                <th>Différence</th>
+            </tr>
+            <tr ng-repeat="infoPrd in infosProduits | filter:search track by $index">
+                <td><span ng-bind="infoPrd.Nom"></span></td>
+                <td><span ng-bind="infoPrd.PrixMin"></span></td>
+                <td><span ng-bind="infoPrd.InfosPrixMin.Enseigne"></span></td>
+                <td><span ng-bind="infoPrd.InfosPrixMin.Adresse"></span><span ng-bind="infoPrd.InfosPrixMin.Ville"></span></td>
+                <td><span ng-bind="infoPrd.PrixMax"></span></td>
+                <td><span ng-bind="infoPrd.InfosPrixMax.Enseigne"></span></td>
+                <td><span ng-bind="infoPrd.InfosPrixMax.Adresse"></span><span ng-bind="infoPrd.InfosPrixMax.Ville"></span></td>
+                <td><span ng-bind="infoPrd.Diff"></span></td>
+            </tr>
+        </table>
+        <div class="infoBulle" ng-show="showInfoBulle == true">
+            <p><span ng-bind="infoBulle.Enseigne"></span> <span ng-bind="infoBulle.Adresse"></span> <span ng-bind="infoBulle.Ville"></span></p>
+        </div>
     </body>
 </html>

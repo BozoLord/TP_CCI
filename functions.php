@@ -173,17 +173,37 @@ else {
     // Récupération des produits
     $req = $PDO->prepare('SELECT * FROM Produits');
     if($req->execute()){
-        $produitsReq = $req->fetchAll();
-        if (count($produitsReq) > 0){
+        $produitsBDD = $req->fetchAll();
+        if (count($produitsBDD) > 0){
             $produits = [];
-            for($x = 0; $x<count($produitsReq); $x++){
+            for($x = 0; $x<count($produitsBDD); $x++){
+                $id = $produitsBDD[$x]->ID_Produit;
+                // Récupération du prix le moins élevé
+                $req = $PDO->prepare('SELECT Magasins.Adresse, Magasins.Enseigne, Villes.Nom, Produit_Magasin.Prix FROM Magasins INNER JOIN Villes ON Magasins.FK_ID_Ville = Villes.ID_Ville INNER JOIN Produit_Magasin on Magasins.ID_Magasin = Produit_Magasin.FK_ID_Magasin WHERE ID_magasin = ( SELECT FK_ID_Magasin FROM Produit_Magasin WHERE FK_ID_Produit = :id ORDER BY prix ASC LIMIT 1 ) AND FK_ID_Produit = :id');
+                $req->bindValue(':id', $id);
+                $req->execute();
+                $res = $req->fetch();
                 $produit = new stdClass();
-                $produit->Nom = $produitsReq[$x]->Nom;
-                $id = $produitsReq[$x]->ID_Produit;
-                $produitReq = $PDO->exec('SELECT Produits.Nom, MIN(Prix), MAX(Prix), Magasins.Enseigne  
-FROM Produit_Magasin 
-JOIN Produits ON Produits.ID_Produit = Produit_Magasin.FK_ID_Produit 
-JOIN Magasins ON Magasins.ID_Magasin = Produit_Magasin.FK_ID_Magasin WHERE Produits.ID_Produit = ' .$id);
+                $produit->Nom = $produitsBDD[$x]->Nom;
+                $produit->PrixMin = strval($res->Prix)."€";
+                $infosPrixMin = new stdClass();
+                $infosPrixMin->Adresse = $res->Adresse;
+                $infosPrixMin->Enseigne = $res->Enseigne;
+                $infosPrixMin->Ville = $res->Nom;
+                $produit->InfosPrixMin = $infosPrixMin;
+                // Récupération du prix le plus élevé
+                $req = $PDO->prepare('SELECT Magasins.Adresse, Magasins.Enseigne, Villes.Nom, Produit_Magasin.Prix FROM Magasins INNER JOIN Villes ON Magasins.FK_ID_Ville = Villes.ID_Ville INNER JOIN Produit_Magasin on Magasins.ID_Magasin = Produit_Magasin.FK_ID_Magasin WHERE ID_magasin = ( SELECT FK_ID_Magasin FROM Produit_Magasin WHERE FK_ID_Produit = :id ORDER BY prix DESC LIMIT 1 ) AND FK_ID_Produit = :id');
+                $req->bindValue(':id', $id);
+                $req->execute();
+                $res = $req->fetch();
+                $produit->PrixMax = strval($res->Prix)."€";
+                $produit->Diff = $res->Prix - $produit->PrixMin;
+                $infosPrixMax = new stdClass();
+                $infosPrixMax->Adresse = $res->Adresse;
+                $infosPrixMax->Enseigne = $res->Enseigne;
+                $infosPrixMax->Ville = $res->Nom;
+                $produit->InfosPrixMax = $infosPrixMax;
+                
                 $produits[] = $produit;
             }
             echo json_encode($produits);

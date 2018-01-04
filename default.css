@@ -3,3 +3,15 @@
     width: 100%;
     color: red;
 }
+.infoBulle{
+    border: 1px dashed black;
+    position: absolute;
+    z-index: 500;
+    background-color: white;
+}
+.table th{
+    font-size: 14px !important;
+}
+.table td{
+    font-size: 12px !important;
+}

@@ -20,3 +20,18 @@
     font-size: 14px !important;
     margin: 3px;
 }
+.row{
+    margin: 0px !important;
+    padding: 25px;
+}
+.hightlight{
+    color: red;
+}
+.nav-item{
+    text-decoration: none !important;
+    list-style: none !important;
+    cursor: pointer;
+}
+.activeButton{
+    border: 1px solid black;
+}

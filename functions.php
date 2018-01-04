@@ -197,7 +197,7 @@ else {
                 $req->execute();
                 $res = $req->fetch();
                 $produit->PrixMax = strval($res->Prix)."€";
-                $produit->Diff = $res->Prix - $produit->PrixMin;
+                $produit->Diff = strval($res->Prix - $produit->PrixMin) . "€";
                 $infosPrixMax = new stdClass();
                 $infosPrixMax->Adresse = $res->Adresse;
                 $infosPrixMax->Enseigne = $res->Enseigne;

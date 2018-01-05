@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
         <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="default.css">
-        <script src="script.js" charset="utf-8"></script>
+
 
     </head>
     <body ng-controller="homeCtrl" ng-init="load()">

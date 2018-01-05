@@ -26,10 +26,17 @@
                 <li class="nav-item" ng-class="{'activeButton' : displayedSection == 'resultat'}">
                     <a class="nav-link" ng-click="displayedSection = 'resultat'">Resultat</a>
                 </li>
-                <form class="form-inline ">
-                    <input type="search" placeholder="Produit, Artisan, Ville" class="form-control mr-sm-2">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Chercher</button>
-
+                <form class="form-inline deepSearchForm">
+                    <input type="search" placeholder="Produit, Artisan, Ville" class="form-control mr-sm-2" ng-model="deepSearch.input" ng-keyup="deepSearch()">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ng-disabled=" !deepSearch.type || deepSearch.input.length < 3">Chercher</button>
+                    <div class="deepSearchChoixContainer">
+                        <input type="radio" id="searchChoix1" name="typeSearch" value="Magasins" ng-model="deepSearch.type">
+                        <label for="searchChoix1">Artisan</label>
+                        <input type="radio" id="searchChoix2" name="typeSearch" value="Produits" ng-model="deepSearch.type">
+                        <label for="searchChoix1">Patisserie</label>
+                        <input type="radio" id="searchChoix2" name="typeSearch" value="Villes" ng-model="deepSearch.type">
+                        <label for="searchChoix1">Ville</label>
+                    </div>
                 </form>
             </ul>
         </header>

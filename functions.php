@@ -168,6 +168,15 @@ if(isset($_POST['form']) && $_POST['form'] == "uploadCsv"){
         }
     }
 }
+else if (isset($_POST['form']) && $_POST['form'] == "deepSearch"){
+    if (isset($_POST['type'] == 'Artisan')){
+        
+    } else if (isset($_POST['type']) == 'Patisserie'){
+        
+    } else if (isset($_POST['type']) == 'Ville'){
+        
+    }
+}
 // Au Chargement de la page je fais un GET des produits et des informations associés
 else {
     // Récupération des produits

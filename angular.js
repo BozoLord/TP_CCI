@@ -4,6 +4,14 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
     var scp = $scope;
     scp.errorMessage = "";
     scp.infosProduits;
+    scp.deepSearch = {
+        input : "",
+        type : "",
+        timer : ""
+    }
+    scp.deepSearch.input = "";
+    scp.deepSearch.type;
+    scp.deepSearch.timer;
 
     $http({
         method: 'GET',
@@ -31,7 +39,6 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
             data: datas
         }).then(function(result) {
             console.log(result.data);
-
         })
     }
     $scope.highlight = function(text, search) {
@@ -40,4 +47,30 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
         }
         return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="searchedText">$&</span>'));
     };
+
+    scp.deepSearch = function(){
+        if (!scp.deepSearch.type)
+            return;
+        clearTimeout(scp.deepSearch.timer);
+        scp.deepSearch.timer = setTimeout(function(){
+            // Recherche du contenu 
+            if (scp.deepSearch.input.length < 2 )
+                return;
+            datas = {
+                form: "deepSearch",
+                type : searchType = scp.deepSearch.type,
+                input: search = scp.deepSearch.input
+            }
+            $http({
+                method: 'POST',
+                url: 'functions.php',
+                data: datas
+            }).then(function(result){
+                console.log(result.data);
+            })
+
+
+
+        }, 1500)
+    }
 }])

@@ -168,31 +168,79 @@ if(isset($_POST['form']) && $_POST['form'] == "uploadCsv"){
         }
     }
 }
+// Recherche
 else if (isset($_POST['form']) && $_POST['form'] == "deepSearch"){
-    switch($_POST['type']){
-        case "Magasins":
-            $req = $PDO->prepare('SELECT Magasins.Enseigne, Magasins.Adresse, Villes.Nom FROM Magasins JOIN Villes ON Magasins.FK_ID_Ville = Villes.ID_Ville WHERE Magasins.Enseigne LIKE  CONCAT("%",:enseigne,"%")');
-            $req->bindValue(':enseigne', $_POST['input']);
-            if($req->execute()){
-                $resultat = $req->fetchAll();
-                if (count($resultat) > 0){
-                    echo json_encode($resultat);
+    if (strlen($_POST['input']) <= 2){
+        return;
+    } else {
+        switch($_POST['type']){
+            case "Magasins":
+                $req = $PDO->prepare('SELECT Magasins.ID_Magasin, Magasins.Enseigne, Magasins.Adresse, Villes.Nom FROM Magasins JOIN Villes ON Magasins.FK_ID_Ville = Villes.ID_Ville WHERE Magasins.Enseigne LIKE  CONCAT("%",:enseigne,"%")');
+                $req->bindValue(':enseigne', $_POST['input']);
+                if($req->execute()){
+                    $resultat = $req->fetchAll();
+                    if (count($resultat) > 0){
+                        echo json_encode($resultat);
+                    } 
                 } 
-            } 
-            break;
+                break;
+            case "Villes":
+                $req = $PDO->prepare('SELECT * FROM Villes JOIN Magasins On Villes.ID_Ville = Magasins.FK_ID_Ville WHERE Villes.Nom LIKE CONCAT("%",:ville,"%")');
+                $req->bindValue(':ville', $_POST['input']);
+                if($req->execute()){
+                    $resultat = $req->fetchAll();
+                    if (count($resultat) > 0){
+                        echo json_encode($resultat);
+                    } 
+                } 
+                break;
+            case "Produits":
+                $req = $PDO->prepare('SELECT Produits.ID_Produit, Produits.Nom FROM Produits 
+                WHERE Produits.Nom LIKE CONCAT("%",:produit,"%")');
+                $req->bindValue(':produit', $_POST['input']);
+                if($req->execute()){
+                    $produits = $req->fetchAll();
+                    if (count($produits) > 0){
+                        for ($x = 0; $x < count($produits); $x++){
+                            $req = $PDO->prepare('SELECT min(Prix) as minPrix, max(Prix) as maxPrix FROM Produit_Magasin 
+                                        WHERE Produit_Magasin.FK_ID_Produit = :idProduit');
+                            $req->bindValue(':idProduit', $produits[$x]->ID_Produit);
+                            if($req->execute()){
+                                $prix = $req->fetch();
+                                if(count($prix) > 0){
+                                    $produits[$x]->prixMin =  strval($prix->minPrix)."€";
+                                    $produits[$x]->prixMax =  strval($prix->maxPrix)."€";
+                                }
+                            }
+                        }
+                    }
+                    echo json_encode($produits);
+                    break;
+                }
+        }
+    }
+}
+// Affichage des détails suite à une recherche
+else if (isset($_POST['form']) && $_POST['form'] == "getDetailsFromDeepSearch"){
+    switch($_POST['type']){
+            // Quand j'arrive après une clique suite à une recherche 'Magasin' ou 'Ville' j'affiche les produits proposés par le dit magasin
+        case "Magasins":
         case "Villes":
-            $req = $PDO->prepare('SELECT * FROM Villes JOIN Magasins On Villes.ID_Ville = Magasins.FK_ID_Ville WHERE Villes.Nom LIKE CONCAT("%",:ville,"%")');
-            $req->bindValue(':ville', $_POST['input']);
+            $req = $PDO->prepare('SELECT Magasins.Enseigne, Magasins.Enseigne, Magasins.Adresse, Villes.Nom as villeNom, Produit_Magasin.Prix, Produits.Nom, Produits.ID_Produit FROM Magasins JOIN Villes ON Villes.ID_Ville = Magasins.FK_ID_Ville JOIN Produit_Magasin ON Produit_Magasin.FK_ID_Magasin = Magasins.ID_Magasin JOIN Produits ON Produits.ID_Produit = Produit_Magasin.FK_ID_Produit WHERE Magasins.ID_Magasin = :idMag');
+            $req->bindValue(':idMag', $_POST['targetID']);
             if($req->execute()){
                 $resultat = $req->fetchAll();
                 if (count($resultat) > 0){
+                    for ($x = 0; $x < count($resultat); $x++){
+                        $resultat[$x]->Prix = strval($resultat[$x]->Prix)."€";
+                    }
                     echo json_encode($resultat);
                 } 
             } 
             break;
         case "Produits":
-            $req = $PDO->prepare('SELECT Produits.Nom as prdtName, Produit_Magasin.Prix, Magasins.Enseigne, Villes.Nom FROM Produits JOIN Produit_Magasin On Produits.ID_Produit = Produit_Magasin.FK_ID_Produit JOIN Magasins On Produit_Magasin.FK_ID_Magasin = Magasins.ID_Magasin JOIN Villes On Magasins.FK_ID_Ville = Villes.ID_Ville WHERE Produits.Nom LIKE CONCAT("%",:produit,"%")');
-            $req->bindValue(':produit', $_POST['input']);
+            $req = $PDO->prepare('SELECT Produit_Magasin.Prix, Produit_Magasin.FK_ID_Magasin, Magasins.Adresse, Magasins.Enseigne, Villes.Nom, Villes.ID_Ville, Produits.Nom as prdtNom FROM Produit_Magasin JOIN Magasins ON Magasins.ID_Magasin = Produit_Magasin.FK_ID_Magasin JOIN Villes On Villes.ID_Ville = Magasins.FK_ID_Ville JOIN Produits ON Produits.ID_Produit = Produit_Magasin.FK_ID_Produit WHERE Produit_Magasin.FK_ID_Produit = :produit');
+            $req->bindValue(':produit', $_POST['targetID']);
             if($req->execute()){
                 $resultat = $req->fetchAll();
                 if (count($resultat) > 0){

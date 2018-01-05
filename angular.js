@@ -14,6 +14,8 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
     scp.deepSearch.timer;
     scp.deepSearchResultat;
     scp.deepSearchResultatType;
+    scp.deepSearchClosingTimeout;
+    scp.infoDetailsPage;
 
     $http({
         method: 'GET',
@@ -58,7 +60,7 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
         clearTimeout(scp.deepSearch.timer);
         scp.deepSearch.timer = setTimeout(function(){
             // Recherche du contenu 
-            if (scp.deepSearch.input.length < 2 ){
+            if (scp.deepSearch.input.length < 2){
                 scp.closeDeepSearch();
             }
             var datas = {
@@ -72,21 +74,37 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
                 data: $httpParamSerializer(datas),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             }).then(function(result){
-                console.log(result.data);
                 scp.deepSearchResultat = result.data;
                 scp.deepSearchResultatType = datas.type;
             })
         }, 150)
     }
     scp.closeDeepSearch = function(){
-        scp.$applyAsync(function(){
-            scp.deepSearchResultat = "";
-            scp.deepSearchResultatType = "";
-        })        
+        scp.deepSearchClosingTimeout = setTimeout(function(){
+            scp.$applyAsync(function(){
+                scp.deepSearchResultat = "";
+                scp.deepSearchResultatType = "";
+            }) 
+        }, 150)       
     }
-    scp.displayDetailsFromDeepSearch = function(){
-        scp.$applyAsync(function(){
-            scp.displayedSection = 'resultat';
+    scp.displayDetailsFromDeepSearch = function(targetID, typeResultat){
+        var datas = {
+            form: "getDetailsFromDeepSearch",
+            targetID: targetID,
+            type: typeResultat
+        }
+        $http({
+            method: 'POST',
+            url: 'functions.php',
+            data: $httpParamSerializer(datas),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        }).then(function(result){
+            console.log(result.data);
+            scp.infoDetailsPage = {
+                details : result.data,
+                type : typeResultat
+            }
         })
+        scp.displayedSection = "resultat";
     }
 }])

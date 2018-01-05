@@ -27,7 +27,7 @@
                     <a class="nav-link" ng-click="displayedSection = 'resultat'">Resultat</a>
                 </li>
                 <form class="form-inline deepSearchForm">
-                    <input type="search" placeholder="Produit, Artisan, Ville" class="form-control mr-sm-2 inputDeep" ng-model="deepSearch.input" ng-keyup="deepSearch()" ng-blur="closeDeepSearch()" ng-click="deepSearch()">
+                    <input type="search" placeholder="Produit, Artisan, Ville" class="form-control mr-sm-2 inputDeep" ng-model="deepSearch.input" ng-keyup="deepSearch()" ng-blur="closeDeepSearch()" ng-click="deepSearch()" ng-disabled="!deepSearch.type">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ng-disabled="!deepSearch.type" >Chercher</button>
                     <div class="deepSearchChoixContainer">
                         <input type="radio" id="artisan" name="typeSearch" value="Magasins" ng-model="deepSearch.type">
@@ -55,7 +55,7 @@
                     <input id="searchInMain" class="form-control" type="search" ng-model="search">
                 </div>
             </div>
-            <table class="table">
+            <table class="table" >
                 <tr>
                     <th>Produit</th>
                     <th>Prix plus bas</th>
@@ -67,7 +67,7 @@
                     <th>Différence</th>
                 </tr>
                 <tr ng-repeat="infoPrd in infosProduits | filter:search track by $index" >
-                    <td><span  ng-bind-html="highlight(infoPrd.Nom, search)"></span>
+                    <td><span ng-bind-html="highlight(infoPrd.Nom, search)"></span>
                     </td>
                     <td><span ng-bind-html="highlight(infoPrd.PrixMin, search)"></span>
                     </td>
@@ -82,25 +82,69 @@
                 </tr>
             </table>
         </section>
-        <section ng-show="displayedSection == 'resultat'" ng-cloak>
+        <section ng-show="displayedSection == 'resultat'" class="resultatSeek" ng-cloak>
+            <article ng-show="infoDetailsPage.type == 'Villes' || infoDetailsPage.type == 'Magasins'">
+                <h2 class="text-center"><span ng-bind="infoDetailsPage.details[0].Enseigne"></span>
+                    <span class="split">|</span>
+                    <span ng-bind="infoDetailsPage.details[0].Adresse"></span>
+                    <span class="split">|</span>
+                    <span ng-bind="infoDetailsPage.details[0].villeNom"></span>
+                </h2>
+                <table class="table" >
+                    <tr>
+                        <th>Produits</th>
+                        <th>Prix</th>
+                    </tr>
+                    <tr ng-repeat="infoPrd in infoDetailsPage.details">
+                        <td><span class="clickable" ng-bind="infoPrd.Nom" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
+                        </td>
+                        <td><span ng-bind="infoPrd.Prix"></span>
+                        </td>
+                    </tr>
+                </table>
+            </article>  
+            <article ng-show="infoDetailsPage.type == 'Produits'">
+                <h2 class="text-center"><span ng-bind="infoDetailsPage.details[0].prdtNom"></span></h2>
+                <table class="table" >
+                    <tr>
+                        <th>Enseignes</th>
+                        <th>Adresse</th>
+                        <th>Villes</th>
+                        <th>Prix</th>
+                    </tr>
+                    <tr ng-repeat="infoPrd in infoDetailsPage.details | filter:search track by $index" >
+                        <td><span class="clickable" ng-bind="infoPrd.Enseigne" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
+                        </td>                        
+                        <td><span class="clickable" ng-bind="infoPrd.Adresse" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
+                        </td>
+                        <td><span ng-bind="infoPrd.Nom" ></span>
+                        </td>
+                        <td><span ng-bind="infoPrd.Prix"></span>
+                        </td>
+                    </tr>
+
+                </table>
+            </article>
         </section>
-        <article ng-show="deepSearchResultat.length > 0 && deepSearchResultatType == 'Villes'" class="deepSearchResultatPopup" ng-cloak>
-            <p class="titleResultat" ng-bind="deepSearchResultat[0].Nom"></p>
-            <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch" ng-click="displayDetailsFromDeepSearch()">
-                <p ng-bind="info.Enseigne"></p><span class="split">|</span><p ng-bind="info.Adresse"></p>
-            </div>
-        </article>
-        <article ng-show="deepSearchResultat.length > 0 && deepSearchResultatType == 'Produits'" class="deepSearchResultatPopup" ng-cloak>
-            <p class="titleResultat" ng-bind="deepSearchResultat[0].prdtName"></p>
-            <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch" ng-click="displayDetailsFromDeepSearch()">
-                <p ng-bind="info.Enseigne"></p><span class="split">|</span><p ng-bind="info.Nom"></p><span class="split">|</span><p ng-bind="info.Prix"></p>
-            </div>
-        </article>
-        <article ng-show="deepSearchResultat.length > 0 && deepSearchResultatType == 'Magasins'" class="deepSearchResultatPopup" ng-cloak>
-            <p class="titleResultat" ng-bind="deepSearchResultat[0].Enseigne"></p>
-            <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch" ng-click="displayDetailsFromDeepSearch()">
-                <p ng-bind="info.Adresse"></p><span class="split">|</span><p ng-bind="info.Nom"></p>
-            </div>
-        </article>
+        <section ng-show="deepSearchResultat.length > 0">
+            <article ng-show="deepSearchResultat.length > 0 && deepSearchResultatType == 'Villes' && deepSearch.input.length > 2"  class="deepSearchResultatPopup" ng-cloak>
+                <p class="titleResultat" ng-bind="deepSearchResultat[0].Nom"></p>
+                <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch" ng-click="$parent.displayDetailsFromDeepSearch(info.ID_Magasin, 'Villes')">
+                    <p ng-bind="info.Enseigne"></p><span class="split">|</span><p ng-bind="info.Adresse"></p>
+                </div>
+            </article>
+            <article ng-show="deepSearchResultat.length > 0 && deepSearchResultatType == 'Produits' && deepSearch.input.length > 2"  class="deepSearchResultatPopup" ng-cloak>
+                <p class="titleResultat" ng-bind="deepSearch.input"></p>
+                <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch" ng-click="$parent.displayDetailsFromDeepSearch(info.ID_Produit, 'Produits')">
+                    <p ng-bind="info.Nom"></p><span class="split">|</span><p class="lowestPrice" ng-bind="info.prixMin"></p><span class="split">|</span><p class="highestPrice"ng-bind="info.prixMax"></p>
+                </div>
+            </article>
+            <article ng-show="deepSearchResultat.length > 0 && deepSearchResultatType == 'Magasins' && deepSearch.input.length > 2"  class="deepSearchResultatPopup" ng-cloak>
+                <p class="titleResultat" ng-bind="deepSearchResultat[0].Enseigne"></p>
+                <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch" ng-click="$parent.displayDetailsFromDeepSearch(info.ID_Magasin, 'Magasins')">
+                    <p ng-bind="info.Adresse"></p><span class="split">|</span><p ng-bind="info.Nom"></p>
+                </div>
+            </article>
+        </section>
     </body>
 </html>

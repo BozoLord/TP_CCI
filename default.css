@@ -20,6 +20,9 @@
     font-size: 14px !important;
     margin: 0px 4px 0px 4px;
 }
+.resultatSeek .split, .resultatSeek h2{
+    font-size: 22px !important;
+}
 .row{
     margin: 0px !important;
     padding: 25px;
@@ -85,4 +88,17 @@ btn-outline-success.disabled, .btn-outline-success:disabled {
 .infoDeepSearch p{
     font-size: 12px;
     cursor: pointer;
+}
+.lowestPrice{
+    color: green;
+}
+.highestPrice{
+    color: orangered;
+}
+.clickable{
+    cursor: pointer;
+    
+}
+.clickable:hover{
+    font-weight: bold;
 }

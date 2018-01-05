@@ -84,4 +84,9 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
             scp.deepSearchResultatType = "";
         })        
     }
+    scp.displayDetailsFromDeepSearch = function(){
+        scp.$applyAsync(function(){
+            scp.displayedSection = 'resultat';
+        })
+    }
 }])

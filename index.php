@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<?php require_once('config.php') ?> 
+<?php require_once('config.php') ?>
 <html lang="en" ng-app="myApp">
     <head>
         <meta charset="UTF-8">
@@ -30,12 +30,12 @@
                     <input type="search" placeholder="Produit, Artisan, Ville" class="form-control mr-sm-2 inputDeep" ng-model="deepSearch.input" ng-keyup="deepSearch()" ng-blur="closeDeepSearch()" ng-click="deepSearch()">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ng-disabled="!deepSearch.type" >Chercher</button>
                     <div class="deepSearchChoixContainer">
-                        <input type="radio" id="searchChoix1" name="typeSearch" value="Magasins" ng-model="deepSearch.type">
-                        <label for="searchChoix1">Artisan</label>
-                        <input type="radio" id="searchChoix2" name="typeSearch" value="Produits" ng-model="deepSearch.type">
-                        <label for="searchChoix1">Patisserie</label>
-                        <input type="radio" id="searchChoix2" name="typeSearch" value="Villes" ng-model="deepSearch.type">
-                        <label for="searchChoix1">Ville</label>
+                        <input type="radio" id="artisan" name="typeSearch" value="Magasins" ng-model="deepSearch.type">
+                        <label for="artisan">Artisan</label>
+                        <input type="radio" id="patisserie" name="typeSearch" value="Produits" ng-model="deepSearch.type">
+                        <label for="patisserie">Patisserie</label>
+                        <input type="radio" id="ville" name="typeSearch" value="Villes" ng-model="deepSearch.type">
+                        <label for="ville">Ville</label>
                     </div>
                 </form>
             </ul>
@@ -89,7 +89,7 @@
             <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch">
                 <p ng-bind="info.Enseigne"></p><span class="split">|</span><p ng-bind="info.Adresse"></p>
             </div>
-        </article>        
+        </article>
         <article ng-show="deepSearchResultat.length > 0 && deepSearchResultatType == 'Produits'" class="deepSearchResultatPopup" ng-cloak>
             <p class="titleResultat" ng-bind="deepSearchResultat[0].prdtName"></p>
             <div ng-repeat="info in deepSearchResultat track by $index" class="infoDeepSearch">

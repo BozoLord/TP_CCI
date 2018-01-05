@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
         <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="default.css">
+
     </head>
     <body ng-controller="homeCtrl" ng-init="displayedSection = 'main'">
         <header>
@@ -58,20 +59,21 @@
                     <th>Adresse Artisan</th>
                     <th>Différence</th>
                 </tr>
-                <tr ng-repeat="infoPrd in infosProduits | filter:search track by $index">
-                    <td><span ng-bind="infoPrd.Nom" ></span></td>
-                    <td><span ng-bind="infoPrd.PrixMin"></span></td>
-                    <td><span ng-bind="infoPrd.InfosPrixMin.Enseigne"></span></td>
-                    <td><span ng-bind="infoPrd.InfosPrixMin.Adresse"></span><span class="split">|</span><span ng-bind="infoPrd.InfosPrixMin.Ville"></span></td>
-                    <td><span ng-bind="infoPrd.PrixMax"></span></td>
-                    <td><span ng-bind="infoPrd.InfosPrixMax.Enseigne"></span></td>
-                    <td><span ng-bind="infoPrd.InfosPrixMax.Adresse"></span><span class="split">|</span><span ng-bind="infoPrd.InfosPrixMax.Ville"></span></td>
-                    <td><span ng-bind="infoPrd.Diff"></span></td>
+                <tr ng-repeat="infoPrd in infosProduits | filter:search track by $index" >
+                    <td><span  ng-bind-html="highlight(infoPrd.Nom, search)"></span>
+                    </td>
+                    <td><span ng-bind-html="highlight(infoPrd.PrixMin, search)"></span>
+                    </td>
+                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Enseigne, search)"></span>
+                    </td>
+                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Ville, search)"></span>
+                    </td>
+                    <td><span ng-bind-html="highlight(infoPrd.PrixMax, search)"></span></td>
+                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Enseigne, search)"></span></td>
+                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Ville, search)"></span></td>
+                    <td><span ng-bind-html="highlight(infoPrd.Diff, search)"></span></td>
                 </tr>
             </table>
-            <div class="infoBulle" ng-show="showInfoBulle == true">
-                <p><span ng-bind="infoBulle.Enseigne"></span> <span ng-bind="infoBulle.Adresse"></span> <span ng-bind="infoBulle.Ville"></span></p>
-            </div>
         </section>
         <section ng-show="displayedSection == 'resultat'" ng-cloak>
         </section>

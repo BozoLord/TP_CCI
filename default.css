@@ -35,3 +35,7 @@
 .activeButton{
     border: 1px solid black;
 }
+.searchedText{
+    background-color: yellow;
+    font-weight: bold;
+}

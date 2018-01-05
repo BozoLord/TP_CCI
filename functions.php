@@ -168,7 +168,7 @@ if(isset($_POST['form']) && $_POST['form'] == "uploadCsv"){
         }
     }
 }
-// Chargement de la page je fais un GET des produits
+// Au Chargement de la page je fais un GET des produits et des informations associés
 else {
     // Récupération des produits
     $req = $PDO->prepare('SELECT * FROM Produits');
@@ -185,6 +185,7 @@ else {
                 $res = $req->fetch();
                 $produit = new stdClass();
                 $produit->Nom = $produitsBDD[$x]->Nom;
+                // Traitement du prix min
                 $produit->PrixMin = strval($res->Prix)."€";
                 $infosPrixMin = new stdClass();
                 $infosPrixMin->Adresse = $res->Adresse;
@@ -196,6 +197,7 @@ else {
                 $req->bindValue(':id', $id);
                 $req->execute();
                 $res = $req->fetch();
+                // Traitement du prix max
                 $produit->PrixMax = strval($res->Prix)."€";
                 $produit->Diff = strval($res->Prix - $produit->PrixMin) . "€";
                 $infosPrixMax = new stdClass();

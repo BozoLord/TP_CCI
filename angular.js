@@ -1,6 +1,6 @@
 var myApp = angular.module('myApp', []);
 
-myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', function($scope, $http, $httpParamSerializer){
+myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce', function($scope, $http, $httpParamSerializer, $sce){
     var scp = $scope;
     scp.errorMessage = "";
     scp.infosProduits;
@@ -34,4 +34,10 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', functio
 
         })
     }
+    $scope.highlight = function(text, search) {
+        if (!search) {
+            return $sce.trustAsHtml(text);
+        }
+        return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="searchedText">$&</span>'));
+    };
 }])

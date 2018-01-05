@@ -17,6 +17,13 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
     scp.deepSearchClosingTimeout;
     scp.infoDetailsPage;
 
+    // système de tri
+
+    scp.sortType = 'Nom';
+    scp.sortReverse = false;
+
+
+
     // Méthode utilisée pour charger les données de la BDD.
     // Appelée au chargement de la page via html body ng-init
     scp.load = function(){
@@ -69,7 +76,7 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
         }
         clearTimeout(scp.deepSearch.timer);
         scp.deepSearch.timer = setTimeout(function(){
-            // Recherche du contenu 
+            // Recherche du contenu
             if (scp.deepSearch.input.length < 2){
                 scp.closeDeepSearch();
             }
@@ -89,17 +96,17 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
             })
         }, 150)
     }
-    
+
     // Gestion de la fermeture de la bar
     scp.closeDeepSearch = function(){
         scp.deepSearchClosingTimeout = setTimeout(function(){
             scp.$applyAsync(function(){
                 scp.deepSearchResultat = "";
                 scp.deepSearchResultatType = "";
-            }) 
-        }, 150)       
+            })
+        }, 150)
     }
-    
+
     // Affichage des détails suite à un clique sur une donnée de la bar
     scp.displayDetailsFromDeepSearch = function(targetID, typeResultat){
         console.log(targetID)

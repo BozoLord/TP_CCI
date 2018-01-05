@@ -13,9 +13,6 @@
         <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="default.css">
         <script src="script.js" charset="utf-8"></script>
-        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" charset="utf-8"></script>
-        <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js" charset="utf-8"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 
     </head>
     <body ng-controller="homeCtrl" ng-init="load()">
@@ -60,34 +57,50 @@
                 </div>
             </div>
             <table class="table table-hover" >
-              <thead>
-                <tr class="thead-dark">
-                    <th>Produit</th>
-                    <th>Prix plus bas</th>
-                    <th>Artisan bas</th>
-                    <th>Adresse Artisan</th>
-                    <th>Prix plus haut</th>
-                    <th>Artisan haut</th>
-                    <th>Adresse Artisan</th>
-                    <th>Différence</th>
-                </tr>
+                <thead>
+                    <tr class="thead-dark">
+                        <th ng-click="sortType = 'Nom'; sortReverse = !sortReverse">Produit
+                            <span ng-show="sortType == 'Nom' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'Nom' && sortReverse" class="fa fa-caret-up"></span></th>
+                        <th ng-click="sortType = 'PrixMin'; sortReverse = !sortReverse">Prix plus bas
+                            <span ng-show="sortType == 'PrixMin' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'PrixMin' && sortReverse" class="fa fa-caret-up"></span></th>
+                        <th ng-click="sortType = 'InfosPrixMin.Enseigne'; sortReverse = !sortReverse">Artisan bas
+                            <span ng-show="sortType == 'InfosPrixMin.Enseigne' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'InfosPrixMin.Enseigne' && sortReverse" class="fa fa-caret-up"></span></th>
+                        <th ng-click="sortType = 'InfosPrixMin.Adresse'; sortReverse = !sortReverse">Adresse Artisan
+                            <span ng-show="sortType == 'InfosPrixMin.Adresse' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'InfosPrixMin.Adresse' && sortReverse" class="fa fa-caret-up"></span></th>
+                        <th ng-click="sortType = 'PrixMax'; sortReverse = !sortReverse">Prix plus haut
+                            <span ng-show="sortType == 'PrixMax' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'PrixMax' && sortReverse" class="fa fa-caret-up"></span></th>
+                        <th ng-click="sortType = 'InfosPrixMax.Enseigne'; sortReverse = !sortReverse">Artisan haut
+                            <span ng-show="sortType == 'InfosPrixMax.Enseigne' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'InfosPrixMax.Enseigne' && sortReverse" class="fa fa-caret-up"></span></th>
+                        <th ng-click="sortType = 'InfosPrixMax.Adresse'; sortReverse = !sortReverse">Adresse Artisan
+                            <span ng-show="sortType == 'InfosPrixMax.Adresse' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'InfosPrixMax.Adresse' && sortReverse" class="fa fa-caret-up"></span></th>
+                        <th ng-click="sortType = 'Diff'; sortReverse = !sortReverse">Différence
+                            <span ng-show="sortType == 'Diff' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'Diff' && sortReverse" class="fa fa-caret-up"></span></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="infoPrd in infosProduits | filter:search track by $index" >
-                    <td><span class="clickable" ng-bind-html="highlight(infoPrd.Nom, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
-                    </td>
-                    <td><span ng-bind-html="highlight(infoPrd.PrixMin, search)"></span>
-                    </td>
-                    <td><span class="clickable" ng-bind-html="highlight(infoPrd.InfosPrixMin.Enseigne, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.InfosPrixMin.ID_Artisan, 'Magasins')"></span>
-                    </td>
-                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Ville, search)"></span>
-                    </td>
-                    <td><span ng-bind-html="highlight(infoPrd.PrixMax, search)"></span></td>
-                    <td><span class="clickable" ng-bind-html="highlight(infoPrd.InfosPrixMax.Enseigne, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.InfosPrixMax.ID_Artisan, 'Magasins')"></span></td>
-                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Ville, search)"></span></td>
-                    <td><span ng-bind-html="highlight(infoPrd.Diff, search)"></span></td>
-                </tr>
-              </tbody>
+                    <tr ng-repeat="infoPrd in infosProduits | filter:search | orderBy:sortType:sortReverse track by $index" >
+                        <td><span class="clickable" ng-bind-html="highlight(infoPrd.Nom, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
+                        </td>
+                        <td><span ng-bind-html="highlight(infoPrd.PrixMin, search)"></span>
+                        </td>
+                        <td><span class="clickable" ng-bind-html="highlight(infoPrd.InfosPrixMin.Enseigne, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.InfosPrixMin.ID_Artisan, 'Magasins')"></span>
+                        </td>
+                        <td><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Ville, search)"></span>
+                        </td>
+                        <td><span ng-bind-html="highlight(infoPrd.PrixMax, search)"></span></td>
+                        <td><span class="clickable" ng-bind-html="highlight(infoPrd.InfosPrixMax.Enseigne, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.InfosPrixMax.ID_Artisan, 'Magasins')"></span></td>
+                        <td><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Ville, search)"></span></td>
+                        <td><span ng-bind-html="highlight(infoPrd.Diff, search)"></span></td>
+                    </tr>
+                </tbody>
             </table>
         </section>
         <section ng-show="displayedSection == 'resultat'" class="resultatSeek" ng-cloak>
@@ -99,45 +112,57 @@
                     <span ng-bind="infoDetailsPage.details[0].villeNom"></span>
                 </h2>
                 <table class="table table-hover" >
-                  <thead>
-                    <tr class="thead-dark">
-                        <th>Produits</th>
-                        <th>Prix</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="infoPrd in infoDetailsPage.details">
-                        <td><span class="clickable" ng-bind="infoPrd.Nom" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
-                        </td>
-                        <td><span ng-bind="infoPrd.Prix"></span>
-                        </td>
-                    </tr>
-                  </tbody>
+                    <thead>
+                        <tr class="thead-dark">
+                            <th ng-click="sortType = 'Nom'; sortReverse = !sortReverse">Produits
+                               <span ng-show="sortType == 'Nom' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Nom' && sortReverse" class="fa fa-caret-up"></span></th>
+                            <th ng-click="sortType = 'Prix'; sortReverse = !sortReverse">Prix
+                                <span ng-show="sortType == 'Prix' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Prix' && sortReverse" class="fa fa-caret-up"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="infoPrd in infoDetailsPage.details | orderBy:sortType:sortReverse">
+                            <td><span class="clickable" ng-bind="infoPrd.Nom" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
+                            </td>
+                            <td><span ng-bind="infoPrd.Prix"></span>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </article>
             <article ng-show="infoDetailsPage.type == 'Produits'">
                 <h2 class="text-center"><span ng-bind="infoDetailsPage.details[0].prdtNom"></span></h2>
                 <table class="table table-hover" >
-                  <thead>
-                    <tr class="thead-dark">
-                        <th>Enseignes</th>
-                        <th>Adresse</th>
-                        <th>Villes</th>
-                        <th>Prix</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="infoPrd in infoDetailsPage.details | filter:search track by $index" >
-                        <td><span class="clickable" ng-bind="infoPrd.Enseigne" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
-                        </td>
-                        <td><span class="clickable" ng-bind="infoPrd.Adresse" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
-                        </td>
-                        <td><span ng-bind="infoPrd.Nom" ></span>
-                        </td>
-                        <td><span ng-bind="infoPrd.Prix"></span>
-                        </td>
-                    </tr>
-                  </tbody>
+                    <thead>
+                        <tr class="thead-dark">
+                            <th ng-click="sortType = 'Enseigne'; sortReverse = !sortReverse">Enseignes
+                                <span ng-show="sortType == 'Enseigne' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Enseigne' && sortReverse" class="fa fa-caret-up"></span></th>
+                            <th ng-click="sortType = 'Adresse'; sortReverse = !sortReverse">Adresse
+                                <span ng-show="sortType == 'Adresse' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Adresse' && sortReverse" class="fa fa-caret-up"></span></th>
+                            <th ng-click="sortType = 'Nom'; sortReverse = !sortReverse">Villes
+                                <span ng-show="sortType == 'Nom' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Nom' && sortReverse" class="fa fa-caret-up"></span></th>
+                            <th ng-click="sortType = 'Prix'; sortReverse = !sortReverse">Prix
+                                <span ng-show="sortType == 'Prix' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Prix' && sortReverse" class="fa fa-caret-up"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="infoPrd in infoDetailsPage.details | orderBy:sortType:sortReverse" >
+                            <td><span class="clickable" ng-bind="infoPrd.Enseigne" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
+                            </td>
+                            <td><span class="clickable" ng-bind="infoPrd.Adresse" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
+                            </td>
+                            <td><span ng-bind="infoPrd.Nom" ></span>
+                            </td>
+                            <td><span ng-bind="infoPrd.Prix"></span>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </article>
         </section>

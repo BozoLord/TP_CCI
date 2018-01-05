@@ -79,6 +79,9 @@ btn-outline-success.disabled, .btn-outline-success:disabled {
 .infoDeepSearch{
     display: flex;
 }
+th{
+    cursor: pointer;
+}
 .titleResultat{
     text-align: center;
     border-bottom: 1px solid black;

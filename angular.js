@@ -12,6 +12,8 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
     scp.deepSearch.input = "";
     scp.deepSearch.type;
     scp.deepSearch.timer;
+    scp.deepSearchResultat;
+    scp.deepSearchResultatType;
 
     $http({
         method: 'GET',
@@ -49,28 +51,37 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
     };
 
     scp.deepSearch = function(){
-        if (!scp.deepSearch.type)
+        if (!scp.deepSearch.type || !scp.deepSearch.input){
+            scp.closeDeepSearch();
             return;
+        }
         clearTimeout(scp.deepSearch.timer);
         scp.deepSearch.timer = setTimeout(function(){
             // Recherche du contenu 
-            if (scp.deepSearch.input.length < 2 )
-                return;
-            datas = {
+            if (scp.deepSearch.input.length < 2 ){
+                scp.closeDeepSearch();
+            }
+            var datas = {
                 form: "deepSearch",
-                type : searchType = scp.deepSearch.type,
-                input: search = scp.deepSearch.input
+                type : scp.deepSearch.type,
+                input: scp.deepSearch.input
             }
             $http({
                 method: 'POST',
                 url: 'functions.php',
-                data: datas
+                data: $httpParamSerializer(datas),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             }).then(function(result){
                 console.log(result.data);
+                scp.deepSearchResultat = result.data;
+                scp.deepSearchResultatType = datas.type;
             })
-
-
-
-        }, 1500)
+        }, 150)
+    }
+    scp.closeDeepSearch = function(){
+        scp.$applyAsync(function(){
+            scp.deepSearchResultat = "";
+            scp.deepSearchResultatType = "";
+        })        
     }
 }])

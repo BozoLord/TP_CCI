@@ -18,7 +18,7 @@
 .split{
     color: red;
     font-size: 14px !important;
-    margin: 3px;
+    margin: 0px 4px 0px 4px;
 }
 .row{
     margin: 0px !important;
@@ -49,14 +49,40 @@
     justify-content: space-between;
     position: absolute;
     bottom: -20px;
-    right: 105px;
+    right: 145px;
     display: flex; 
     font-size: 12px;
 }
 .deepSearchChoixContainer input{
-    margin-left: 22px;
+    margin-left: 35px;
+}
+.inputDeep{
+    width: 300px !important;
 }
 btn-outline-success.disabled, .btn-outline-success:disabled {
     color: #28a745;
     border-color: grey !important;
     background-color: transparent;
+}
+.deepSearchResultatPopup{
+    right: 115px;
+    position: absolute;
+    top: 54px;
+    border: 1px dashed black;
+    width: 300px;
+    background-color: white;
+    z-index: 750;
+}
+.infoDeepSearch{
+    display: flex;
+}
+.titleResultat{
+    text-align: center;
+    border-bottom: 1px solid black;
+    font-weight: bold;
+    font-size: 14px;
+}
+.infoDeepSearch p{
+    font-size: 12px;
+    cursor: pointer;
+}

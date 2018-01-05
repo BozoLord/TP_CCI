@@ -169,12 +169,40 @@ if(isset($_POST['form']) && $_POST['form'] == "uploadCsv"){
     }
 }
 else if (isset($_POST['form']) && $_POST['form'] == "deepSearch"){
-    if (isset($_POST['type'] == 'Artisan')){
-        
-    } else if (isset($_POST['type']) == 'Patisserie'){
-        
-    } else if (isset($_POST['type']) == 'Ville'){
-        
+    switch($_POST['type']){
+        case "Magasins":
+            $req = $PDO->prepare('SELECT Magasins.Enseigne, Magasins.Adresse, Villes.Nom FROM Magasins JOIN Villes ON Magasins.FK_ID_Ville = Villes.ID_Ville WHERE Magasins.Enseigne LIKE  CONCAT("%",:enseigne,"%")');
+            $req->bindValue(':enseigne', $_POST['input']);
+            if($req->execute()){
+                $resultat = $req->fetchAll();
+                if (count($resultat) > 0){
+                    echo json_encode($resultat);
+                } 
+            } 
+            break;
+        case "Villes":
+            $req = $PDO->prepare('SELECT * FROM Villes JOIN Magasins On Villes.ID_Ville = Magasins.FK_ID_Ville WHERE Villes.Nom LIKE CONCAT("%",:ville,"%")');
+            $req->bindValue(':ville', $_POST['input']);
+            if($req->execute()){
+                $resultat = $req->fetchAll();
+                if (count($resultat) > 0){
+                    echo json_encode($resultat);
+                } 
+            } 
+            break;
+        case "Produits":
+            $req = $PDO->prepare('SELECT Produits.Nom as prdtName, Produit_Magasin.Prix, Magasins.Enseigne, Villes.Nom FROM Produits JOIN Produit_Magasin On Produits.ID_Produit = Produit_Magasin.FK_ID_Produit JOIN Magasins On Produit_Magasin.FK_ID_Magasin = Magasins.ID_Magasin JOIN Villes On Magasins.FK_ID_Ville = Villes.ID_Ville WHERE Produits.Nom LIKE CONCAT("%",:produit,"%")');
+            $req->bindValue(':produit', $_POST['input']);
+            if($req->execute()){
+                $resultat = $req->fetchAll();
+                if (count($resultat) > 0){
+                    for ($x = 0; $x < count($resultat); $x++){
+                        $resultat[$x]->Prix = strval($resultat[$x]->Prix)."€";
+                    }
+                    echo json_encode($resultat);
+                } 
+            }
+            break;
     }
 }
 // Au Chargement de la page je fais un GET des produits et des informations associés
@@ -214,7 +242,7 @@ else {
                 $infosPrixMax->Enseigne = $res->Enseigne;
                 $infosPrixMax->Ville = $res->Nom;
                 $produit->InfosPrixMax = $infosPrixMax;
-                
+
                 $produits[] = $produit;
             }
             echo json_encode($produits);

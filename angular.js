@@ -17,6 +17,8 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
     scp.deepSearchClosingTimeout;
     scp.infoDetailsPage;
 
+    // Méthode utilisée pour charger les données de la BDD.
+    // Appelée au chargement de la page via html body ng-init
     scp.load = function(){
         $http({
             method: 'GET',
@@ -28,6 +30,8 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
         })
     }
 
+    // Méthode pour sauvegarder et charger un CSV.
+    // Supprime les données existantes
     scp.SubmitCsv = function(){
         var entree = document.getElementById('fichierCsv').files[0];
         if (entree == undefined){
@@ -49,6 +53,7 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
             scp.load();
         })
     }
+    // Méthode utilisée pour mettre en surbrillance les critères de recherche du filtre tableau main
     $scope.highlight = function(text, search) {
         if (!search) {
             return $sce.trustAsHtml(text);
@@ -56,6 +61,7 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
         return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="searchedText">$&</span>'));
     };
 
+    // Recherche dans la zone de recherche de la navbar
     scp.deepSearch = function(){
         if (!scp.deepSearch.type || !scp.deepSearch.input){
             scp.closeDeepSearch();
@@ -83,6 +89,8 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
             })
         }, 150)
     }
+    
+    // Gestion de la fermeture de la bar
     scp.closeDeepSearch = function(){
         scp.deepSearchClosingTimeout = setTimeout(function(){
             scp.$applyAsync(function(){
@@ -91,6 +99,8 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
             }) 
         }, 150)       
     }
+    
+    // Affichage des détails suite à un clique sur une donnée de la bar
     scp.displayDetailsFromDeepSearch = function(targetID, typeResultat){
         console.log(targetID)
         var datas = {

@@ -17,13 +17,16 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
     scp.deepSearchClosingTimeout;
     scp.infoDetailsPage;
 
-    $http({
-        method: 'GET',
-        url: 'functions.php',
-    }).then(function(result) {
-        scp.infosProduits = result.data;
-        console.log(result.data);
-    })
+    scp.load = function(){
+        $http({
+            method: 'GET',
+            url: 'functions.php',
+        }).then(function(result) {
+            scp.infosProduits = result.data;
+            scp.displayedSection = "main";
+            console.log(result.data);
+        })
+    }
 
     scp.SubmitCsv = function(){
         var entree = document.getElementById('fichierCsv').files[0];
@@ -42,7 +45,8 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
             enctype: 'multipart/form-data',
             data: datas
         }).then(function(result) {
-            console.log(result.data);
+            console.log(result);
+            scp.load();
         })
     }
     $scope.highlight = function(text, search) {

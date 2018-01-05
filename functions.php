@@ -161,6 +161,7 @@ if(isset($_POST['form']) && $_POST['form'] == "uploadCsv"){
                                 }
                             }
                             $PDO->exec('INSERT INTO Produit_Magasin (Prix, FK_ID_Magasin, FK_ID_Produit) VALUES ' .$queryItems);
+                            echo "Done sucess";
                         }
                     }
                 }

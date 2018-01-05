@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="default.css">
 
     </head>
-    <body ng-controller="homeCtrl" ng-init="displayedSection = 'main'">
+    <body ng-controller="homeCtrl" ng-init="load()">
         <header ng-cloak>
             <ul class="navbar navbar-inverse navbar-light mr-auto mt-2 mt-lg-0" style="background-color: #e3f2fd;">
                 <li class="nav-item" ng-class="{'activeButton' : displayedSection == 'csv'}">

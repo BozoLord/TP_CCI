@@ -85,6 +85,11 @@ btn-outline-success.disabled, .btn-outline-success:disabled {
     font-weight: bold;
     font-size: 14px;
 }
+.linkDisabled{
+    color: grey !important;
+    pointer-events: none !important; 
+    cursor: default !important;
+}
 .infoDeepSearch p{
     font-size: 12px;
     cursor: pointer;

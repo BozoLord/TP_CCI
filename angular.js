@@ -88,6 +88,7 @@ myApp.controller('homeCtrl', ['$scope', '$http', '$httpParamSerializer', '$sce',
         }, 150)       
     }
     scp.displayDetailsFromDeepSearch = function(targetID, typeResultat){
+        console.log(targetID)
         var datas = {
             form: "getDetailsFromDeepSearch",
             targetID: targetID,

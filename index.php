@@ -23,7 +23,7 @@
                 <li class="nav-item" ng-class="{'activeButton' : displayedSection == 'main'}">
                     <a class="nav-link" ng-click="displayedSection = 'main'">Tableau Principal</a>
                 </li>
-                <li class="nav-item" ng-class="{'activeButton' : displayedSection == 'resultat'}">
+                <li class="nav-item" ng-class="{'activeButton' : displayedSection == 'resultat', 'linkDisabled' : infoDetailsPage.details == '' || !infoDetailsPage.details}">
                     <a class="nav-link" ng-click="displayedSection = 'resultat'">Resultat</a>
                 </li>
                 <form class="form-inline deepSearchForm">
@@ -67,16 +67,16 @@
                     <th>Différence</th>
                 </tr>
                 <tr ng-repeat="infoPrd in infosProduits | filter:search track by $index" >
-                    <td><span ng-bind-html="highlight(infoPrd.Nom, search)"></span>
+                    <td><span class="clickable" ng-bind-html="highlight(infoPrd.Nom, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
                     </td>
                     <td><span ng-bind-html="highlight(infoPrd.PrixMin, search)"></span>
                     </td>
-                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Enseigne, search)"></span>
+                    <td><span class="clickable" ng-bind-html="highlight(infoPrd.InfosPrixMin.Enseigne, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.InfosPrixMin.ID_Artisan, 'Magasins')"></span>
                     </td>
                     <td><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMin.Ville, search)"></span>
                     </td>
                     <td><span ng-bind-html="highlight(infoPrd.PrixMax, search)"></span></td>
-                    <td><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Enseigne, search)"></span></td>
+                    <td><span class="clickable" ng-bind-html="highlight(infoPrd.InfosPrixMax.Enseigne, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.InfosPrixMax.ID_Artisan, 'Magasins')"></span></td>
                     <td><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Ville, search)"></span></td>
                     <td><span ng-bind-html="highlight(infoPrd.Diff, search)"></span></td>
                 </tr>

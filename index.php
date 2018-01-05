@@ -12,6 +12,10 @@
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
         <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="default.css">
+        <script src="script.js" charset="utf-8"></script>
+        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" charset="utf-8"></script>
+        <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 
     </head>
     <body ng-controller="homeCtrl" ng-init="load()">
@@ -55,8 +59,9 @@
                     <input id="searchInMain" class="form-control" type="search" ng-model="search">
                 </div>
             </div>
-            <table class="table" >
-                <tr>
+            <table class="table table-hover" >
+              <thead>
+                <tr class="thead-dark">
                     <th>Produit</th>
                     <th>Prix plus bas</th>
                     <th>Artisan bas</th>
@@ -66,6 +71,8 @@
                     <th>Adresse Artisan</th>
                     <th>Différence</th>
                 </tr>
+                </thead>
+                <tbody>
                 <tr ng-repeat="infoPrd in infosProduits | filter:search track by $index" >
                     <td><span class="clickable" ng-bind-html="highlight(infoPrd.Nom, search)" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
                     </td>
@@ -80,6 +87,7 @@
                     <td><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Adresse, search)"></span><span class="split">|</span><span ng-bind-html="highlight(infoPrd.InfosPrixMax.Ville, search)"></span></td>
                     <td><span ng-bind-html="highlight(infoPrd.Diff, search)"></span></td>
                 </tr>
+              </tbody>
             </table>
         </section>
         <section ng-show="displayedSection == 'resultat'" class="resultatSeek" ng-cloak>
@@ -90,31 +98,38 @@
                     <span class="split">|</span>
                     <span ng-bind="infoDetailsPage.details[0].villeNom"></span>
                 </h2>
-                <table class="table" >
-                    <tr>
+                <table class="table table-hover" >
+                  <thead>
+                    <tr class="thead-dark">
                         <th>Produits</th>
                         <th>Prix</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr ng-repeat="infoPrd in infoDetailsPage.details">
                         <td><span class="clickable" ng-bind="infoPrd.Nom" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.ID_Produit, 'Produits')"></span>
                         </td>
                         <td><span ng-bind="infoPrd.Prix"></span>
                         </td>
                     </tr>
+                  </tbody>
                 </table>
-            </article>  
+            </article>
             <article ng-show="infoDetailsPage.type == 'Produits'">
                 <h2 class="text-center"><span ng-bind="infoDetailsPage.details[0].prdtNom"></span></h2>
-                <table class="table" >
-                    <tr>
+                <table class="table table-hover" >
+                  <thead>
+                    <tr class="thead-dark">
                         <th>Enseignes</th>
                         <th>Adresse</th>
                         <th>Villes</th>
                         <th>Prix</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr ng-repeat="infoPrd in infoDetailsPage.details | filter:search track by $index" >
                         <td><span class="clickable" ng-bind="infoPrd.Enseigne" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
-                        </td>                        
+                        </td>
                         <td><span class="clickable" ng-bind="infoPrd.Adresse" ng-click="$parent.displayDetailsFromDeepSearch(infoPrd.FK_ID_Magasin, 'Magasins')"></span>
                         </td>
                         <td><span ng-bind="infoPrd.Nom" ></span>
@@ -122,7 +137,7 @@
                         <td><span ng-bind="infoPrd.Prix"></span>
                         </td>
                     </tr>
-
+                  </tbody>
                 </table>
             </article>
         </section>
